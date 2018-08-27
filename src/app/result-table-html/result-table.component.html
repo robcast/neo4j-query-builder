@@ -2,17 +2,8 @@
 	<span>Cypher query:</span>
 	<pre>{{queryState.resultCypherQuery}}</pre>
 	<p>Query results ({{queryState.resultInfo}}):</p>
-	<table mat-table [dataSource]="queryState.results">
-	
-	   <ng-container matColumnDef="column">
-         <th mat-header-cell *matHeaderCellDef> colheader </th>
-         <td mat-cell *matCellDef="let data"> {{data}} </td>
-       </ng-container>
-	   
-	   <tr mat-header-row *matHeaderRowDef="queryState.resultColumns"></tr>
-       <tr mat-row *matRowDef="let data; columns: queryState.resultColumns"></tr>
-	   
-<!-- 	<tr>
+	<table border="1">
+		<tr>
 			<ng-container
 				*ngIf="queryState.resultTypes=='node' && queryState.resultColumns">
 			<th *ngFor="let col of queryState.resultColumns">{{col?col.title:col}}</th>
@@ -21,6 +12,6 @@
 		<tr class="resultRow" *ngFor="let row of queryState.results"
 			[rowData]="row" [rowType]="queryState.resultTypes"
 			[columns]="queryState.resultColumns">
-		</tr> -->
+		</tr>
 	</table>
 </div>
