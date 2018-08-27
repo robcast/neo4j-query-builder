@@ -1,12 +1,12 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 
-import { QueryMode } from '../query-mode';
-import { QueryStep } from '../query-step';
-import { QueryState } from '../query-state';
+import { QueryMode } from '../model/query-mode';
+import { QueryStep } from '../model/query-step';
+import { QueryState } from '../model/query-state';
 
-import { QueryService } from '../query.service';
-import { NormalizationService } from '../normalization.service';
-import { getRelationByName } from '../ismi-relation-types';
+import { QueryService } from '../services/query.service';
+import { NormalizationService } from '../services/normalization.service';
+import { getRelationByName } from '../ismi/ismi-relation-types';
 
 
 @Component( {

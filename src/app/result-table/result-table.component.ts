@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { QueryState } from '../query-state';
+import { QueryState } from '../model/query-state';
 import { ResultRowComponent } from './result-row.component';
 
 

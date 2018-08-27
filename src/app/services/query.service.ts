@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import {NEO4J_BASE_URL, NEO4J_AUTHENTICATION} from './app-config'; 
-import {QueryMode, QUERY_MODES, FIRST_QUERY_MODES} from './query-mode';
-import {QueryState} from './query-state';
-import {QueryStep} from './query-step';
-import {getResultType} from './result-type';
-import {ISMI_RESULT_TYPES} from './ismi-result-types';
-import {getRelationType} from './ismi-relation-types';
+import {NEO4J_BASE_URL, NEO4J_AUTHENTICATION} from '../app-config'; 
+import {QueryMode, QUERY_MODES, FIRST_QUERY_MODES} from '../model/query-mode';
+import {QueryState} from '../model/query-state';
+import {QueryStep} from '../model/query-step';
+import {getResultType} from '../model/result-type';
+import {ISMI_RESULT_TYPES} from '../ismi/ismi-result-types';
+import {getRelationType} from '../ismi/ismi-relation-types';
 
 @Injectable({
   providedIn: 'root'
@@ -335,11 +335,12 @@ export class QueryService {
      */
     fetchCypherResults(queries: string[], params=[{}]) {
         console.debug("fetching cypher queries: ", queries);
-        let headers = new HttpHeaders();
         let auth = NEO4J_AUTHENTICATION;
-        headers.append('Authorization', 'Basic ' + btoa(`${auth.user}:${auth.password}`));
-        headers.append('Content-Type', 'application/json');
-        headers.append('Accept', 'application/json');
+        let headers = new HttpHeaders({
+            'Authorization': 'Basic ' + btoa(`${auth.user}:${auth.password}`),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        });
         // put headers in options
         let opts = {'headers': headers};
         // unpack queries into statements
@@ -357,5 +358,6 @@ export class QueryService {
 }
 
 export interface N4jQueryResponse {
-    results: any;
+    results: any[];
+    errors: any[];
 }

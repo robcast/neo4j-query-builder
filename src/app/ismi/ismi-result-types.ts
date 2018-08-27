@@ -1,4 +1,4 @@
-import {ResultType} from './result-type';
+import {ResultType} from '../model/result-type';
 
 
 export var ISMI_RESULT_TYPES: {[name:string]: ResultType} = {

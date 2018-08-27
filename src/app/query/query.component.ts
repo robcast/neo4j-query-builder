@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { QueryService } from '../query.service';
-import { QueryState } from '../query-state';
+import { QueryService } from '../services/query.service';
+import { QueryState } from '../model/query-state';
 
 @Component( {
     selector: 'app-query',
