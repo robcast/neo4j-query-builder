@@ -15,6 +15,7 @@
 .c9/
 *.launch
 .settings/
+.externalToolBuilders/
 *.sublime-workspace
 
 # IDE - VSCode
@@ -37,3 +38,6 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# do not check in config
+src/app/app-config.ts

@@ -1,0 +1,17 @@
+<div *ngIf="queryState">
+	<span>Cypher query:</span>
+	<pre>{{queryState.resultCypherQuery}}</pre>
+	<p>Query results ({{queryState.resultInfo}}):</p>
+	<table border="1">
+		<tr>
+			<ng-container
+				*ngIf="queryState.resultTypes=='node' && queryState.resultColumns">
+			<th *ngFor="let col of queryState.resultColumns">{{col?col.title:col}}</th>
+			</ng-container>
+		</tr>
+		<tr class="resultRow" *ngFor="let row of queryState.results"
+			[rowData]="row" [rowType]="queryState.resultTypes"
+			[columns]="queryState.resultColumns">
+		</tr>
+	</table>
+</div>

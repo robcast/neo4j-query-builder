@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'n4j-query-ismi';
+  title = 'Neo4J Query Browser for ISMI';
 }

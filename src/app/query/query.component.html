@@ -1,0 +1,21 @@
+<div class="container">    
+    <h1>ISMI-Lab Query Builder</h1>
+</div>
+<div class="container">    
+    <div>Select a query step:</div>
+    <query-select *ngFor="let step of queryStepList; let i=index;"
+        [queryStep]="step" [index]="i" 
+        (queryChanged)="onQueryChanged($event)"></query-select>
+    <div>
+      <button (click)="addQueryStep()">add step</button>
+      <button (click)="removeQueryStep()">remove step</button>
+      <button (click)="resetQuery()">reset query</button>
+      <button (click)="showQueryUrl()">get query url</button>
+    </div>
+</div>
+<div class="container">
+    <query-result *ngIf="queryState?.results"
+        [resultInfo]="queryState.resultInfo"
+        [queryState]="queryState">
+    </query-result>
+</div>
