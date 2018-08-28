@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, Input } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
 
 import { QueryState } from '../model/query-state';
 import { ResultRowComponent } from './result-row.component';
@@ -12,7 +13,14 @@ import { ResultRowComponent } from './result-row.component';
 } )
 export class ResultTableComponent {
 
-    public queryState: QueryState;
-    public resultInfo: string;
+    @Input() queryState: QueryState;
+    @Input() resultInfo: string;
+    
+    displayedColumns: string[] = [];
+    
+    ngOnChanges() {
+        console.debug("resulttable: onChanges");
+        this.displayedColumns = this.queryState.resultColumns.map(col => col.name);
+    }
 
 }
