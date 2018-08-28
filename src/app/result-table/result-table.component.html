@@ -3,7 +3,7 @@
   <pre>{{queryState.resultCypherQuery}}</pre>
   <p>Query results ({{queryState.resultInfo}}):</p>
   
-  <table mat-table [dataSource]="queryState.results">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
     <ng-container [matColumnDef]="column.name"
       *ngFor="let column of queryState.resultColumns">
@@ -14,4 +14,6 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
+
+  <mat-paginator [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons></mat-paginator>    
 </div>
