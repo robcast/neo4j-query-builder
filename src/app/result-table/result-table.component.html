@@ -1,19 +1,37 @@
 <div *ngIf="queryState">
   <span>Cypher query:</span>
   <pre>{{queryState.resultCypherQuery}}</pre>
-  <p>Query results ({{queryState.resultInfo}}):</p>
-  
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <h2>Query result</h2>
+  <pre>{{resultInfo}}</pre>
+  <div *ngIf="showTable">
+    <button (click)="showTable=false">Hide result table</button>
+  </div>
+  <div *ngIf="!showTable">
+    <button (click)="showTable=true">Show result table</button>
+  </div>
+  <div *ngIf="showTable">
+    <div>
+      <form (ngSubmit)="onSelectCols($event)">
+        Columns: 
+        <span *ngFor="let col of allColumns"> 
+            <input type="checkbox" name="col{{col.name}}" value="{{col.name}}"
+                [(ngModel)]="col.show">{{col.name}}
+        </span>
+        <button type="submit">change columns</button>
+      </form>
+    </div>
 
-    <ng-container [matColumnDef]="column.name"
-      *ngFor="let column of queryState.resultColumns">
-      <th mat-header-cell *matHeaderCellDef> {{column.title}} </th>
-      <td mat-cell *matCellDef="let row"> {{row[column.name]}} </td>
-    </ng-container>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
+      <ng-container [matColumnDef]="column.name" *ngFor="let column of allColumns">
+        <th mat-header-cell *matHeaderCellDef>{{column.title}}</th>
+        <td mat-cell *matCellDef="let row">{{row[column.name]}}</td>
+      </ng-container>
 
-  <mat-paginator [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons></mat-paginator>    
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons></mat-paginator>
+  </div>
 </div>

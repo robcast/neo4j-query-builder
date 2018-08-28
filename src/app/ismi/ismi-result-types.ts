@@ -3,7 +3,7 @@ import {ResultType} from '../model/result-type';
 
 export var ISMI_RESULT_TYPES: {[name:string]: ResultType} = {
     '*': new ResultType('*', 'ismi_id', [
-            'ismi_id', 'label'
+            'ismi_id', '_label'
         ]),
     'PERSON': new ResultType('PERSON', 'ismi_id', [
         'ismi_id', 'name_translit', 'name', 'birth_date', 'death_date'

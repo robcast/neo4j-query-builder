@@ -17,8 +17,9 @@ export class ResultTableComponent implements OnInit {
     @Input() resultInfo: string;
 
     dataSource: MatTableDataSource<any>;
-
     displayedColumns: string[] = [];
+    showTable: boolean = true;
+    allColumns: Array<any>;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -35,16 +36,21 @@ export class ResultTableComponent implements OnInit {
     ngOnInit() {
         console.debug("resulttable: onInit");
         this.dataSource = new MatTableDataSource(this.queryState.results);
-        //this.dataSource.paginator = this.paginator;
-        this.displayedColumns = this.queryState.resultColumns.map(col => col.name);
+        this.allColumns = this.queryState.resultColumns;
+        this.displayedColumns = this.allColumns.filter(col => col.show).map(col => col.name);
     }
 
     ngOnChanges() {
         console.debug("resulttable: onChanges");
         if (this.dataSource != null) {
             this.dataSource.data = this.queryState.results;
+            this.showTable = (this.dataSource.data.length < 1000);
+            this.allColumns = this.queryState.resultColumns;
+            this.displayedColumns = this.allColumns.filter(col => col.show).map(col => col.name);
         }
-        this.displayedColumns = this.queryState.resultColumns.map(col => col.name);
     }
-
+    
+    onSelectCols(event: any) {
+        this.displayedColumns = this.allColumns.filter(col => col.show).map(col => col.name);
+    }
 }
