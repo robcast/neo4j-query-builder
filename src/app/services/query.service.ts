@@ -268,7 +268,7 @@ export class QueryService {
                 });
                 let info = '';
                 for (let t in resTypes) {
-                    info += t + '(' + resTypes[t] + ') ';   
+                    info += resTypes[t] + ' ' + t + ' ';   
                 }
                 info = info.substr(0, info.length-1);
                 this.state.resultInfo = info;

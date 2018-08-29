@@ -1,60 +1,50 @@
 <p *ngIf="resultInfo">&nbsp;&nbsp;&nbsp;result: {{resultInfo}}</p>
+
 <div>
-    <form (ngSubmit)="onSubmit()">
-        <select name="mode" (change)="onSelectMode($event)">
-            <option></option>
-            <option *ngFor="let mode of getQueryModes()" 
-                [selected]="mode.id==selectedMode?.id" [value]="mode.id">
-                {{mode.label}}
-            </option>
-        </select>
+  <form (ngSubmit)="onSubmit()">
+    <select name="mode" (change)="onSelectMode($event)">
+      <option></option>
+      <option *ngFor="let mode of getQueryModes()" [selected]="mode.id==selectedMode?.id" [value]="mode.id">{{mode.label}}
+      </option>
+    </select> 
+    <span *ngIf="selectedMode?.id=='type_is'"> 
+      <select name="option" *ngIf="queryOptions" [ngModel]="selectedOption"
+        (change)="onSelectOption($event)">
+          <option></option>
+          <option *ngFor="let option of queryOptions" [value]="option">{{option}}</option>
+      </select>
+    </span> 
+    <span *ngIf="selectedMode?.id=='relation_is'"> 
+      <select name="option" *ngIf="queryOptions" [ngModel]="selectedOption"
+        (change)="onSelectOption($event)">
+        <option></option>
+        <option *ngFor="let option of queryOptions" [value]="option.getName()">{{option.getLabel()}}</option>
+      </select>
+    </span> 
+    <span *ngIf="selectedMode?.id=='att_contains' || selectedMode?.id=='att_contains_norm'"> 
+      <select name="option"
+        [ngModel]="selectedOption" (change)="selectedOption=$event.target.value">
+        <option></option>
+        <option *ngFor="let option of queryOptions" [value]="option">{{option}}</option>
+      </select> 
+      <span>contains</span> 
+      <input type="text" name="value" [(ngModel)]="queryInput" />
+    </span> 
+    <span *ngIf="selectedMode?.id=='att_num_range'"> 
+      <select name="option" [ngModel]="selectedOption"
+        (change)="selectedOption=$event.target.value">
+        <option></option>
+        <option *ngFor="let option of queryOptions" [value]="option">{{option}}</option>
+      </select> 
+      <span>is between</span> 
+      <input type="text" name="value1" [(ngModel)]="queryInput" /> 
+      <span>and</span> 
+      <input type="text" name="value2" [(ngModel)]="queryInput2" />
+    </span> 
+    <span *ngIf="selectedMode?.id=='id_is'"> 
+      <input type="text" name="value" [(ngModel)]="queryInput" />
+    </span>
 
-        <span *ngIf="selectedMode?.id=='type_is'">
-            <select name="option" *ngIf="queryOptions" [ngModel]="selectedOption" (change)="onSelectOption($event)">
-                <option></option>
-                <option *ngFor="let option of queryOptions" [value]="option">
-                    {{option}}
-                </option>
-            </select>
-        </span>
-
-        <span *ngIf="selectedMode?.id=='relation_is'">
-            <select name="option" *ngIf="queryOptions" [ngModel]="selectedOption" (change)="onSelectOption($event)">
-                <option></option>
-                <option *ngFor="let option of queryOptions" [value]="option.getName()">
-                    {{option.getLabel()}}
-                </option>
-            </select>
-        </span>
-
-        <span *ngIf="selectedMode?.id=='att_contains' || selectedMode?.id=='att_contains_norm'">
-            <select name="option" [ngModel]="selectedOption" (change)="selectedOption=$event.target.value">
-                <option></option>
-                <option *ngFor="let option of queryOptions" [value]="option">
-                    {{option}}
-                </option>
-            </select>
-            <span>contains</span>
-            <input type="text" name="value" [(ngModel)]="queryInput"/>
-        </span>
-
-        <span *ngIf="selectedMode?.id=='att_num_range'">
-            <select name="option" [ngModel]="selectedOption" (change)="selectedOption=$event.target.value">
-                <option></option>
-                <option *ngFor="let option of queryOptions" [value]="option">
-                    {{option}}
-                </option>
-            </select>
-            <span>is between</span>
-            <input type="text" name="value1" [(ngModel)]="queryInput"/>
-            <span>and</span>
-            <input type="text" name="value2" [(ngModel)]="queryInput2"/>
-        </span>
-
-        <span *ngIf="selectedMode?.id=='id_is'">
-            <input type="text" name="value" [(ngModel)]="queryInput"/>
-        </span>
-
-        <button type="submit">Submit</button>
-    </form>
+    <button type="submit">Submit</button>
+  </form>
 </div>
