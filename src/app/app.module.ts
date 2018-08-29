@@ -13,15 +13,13 @@ import { AppComponent } from './app.component';
 import { QueryComponent } from './query/query.component';
 import { SelectComponent } from './select/select.component';
 import { ResultTableComponent } from './result-table/result-table.component';
-import { ResultRowComponent } from './result-table/result-row.component';
 
 @NgModule( {
     declarations: [
         AppComponent,
         QueryComponent,
         SelectComponent,
-        ResultTableComponent,
-        ResultRowComponent
+        ResultTableComponent
     ],
     imports: [
         BrowserModule,

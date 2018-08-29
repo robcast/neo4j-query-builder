@@ -1,3 +1,14 @@
 table {
   width: 100%;
 }
+
+.mat-cell,
+.mat-header-cell {
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 0.6rem;
+}
+
+.mat-cell:last-child,
+.mat-header-cell:last-child {
+  border-right: none;
+}

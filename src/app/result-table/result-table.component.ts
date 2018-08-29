@@ -2,7 +2,6 @@ import { Component, OnInit, OnChanges, Input, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
 
 import { QueryState } from '../model/query-state';
-import { ResultRowComponent } from './result-row.component';
 
 
 @Component({
