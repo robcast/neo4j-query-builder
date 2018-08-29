@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 import {NEO4J_BASE_URL, NEO4J_AUTHENTICATION} from '../app-config'; 
 import {QueryMode, QUERY_MODES, FIRST_QUERY_MODES} from '../model/query-mode';
@@ -19,6 +20,14 @@ export class QueryService {
     public state: QueryState;
     public objectTypes: string[];
     
+    private loadingSubject = new BehaviorSubject<boolean>(false);
+    public loading$ = this.loadingSubject.asObservable();
+
+    private stateSubject = new BehaviorSubject<QueryState>(new QueryState());
+    public queryState$ = this.stateSubject.asObservable();
+
+
+
     constructor(private _http: HttpClient) {
         // init query state
         this.state = new QueryState();
@@ -228,6 +237,7 @@ export class QueryService {
      */
     runQuery() {
         this.createCypherQuery();
+        this.loadingSubject.next(true);
         this.state.resultInfo = 'loading...';
         /*
          * run query for result table
@@ -246,8 +256,8 @@ export class QueryService {
             queries.push(this.state.inRelsCypherQuery);
             params.push(this.state.cypherQueryParams);
         }
-        let res = this.fetchCypherResults(queries, params);
-        res.subscribe(
+        let result = this.fetchCypherResults(queries, params);
+        result.subscribe(
             data => {
                 console.debug("neo4j result data=", data);
                 let resIdx = 0;
@@ -271,9 +281,7 @@ export class QueryService {
                     info += resTypes[t] + ' ' + t + ' ';   
                 }
                 info = info.substr(0, info.length-1);
-                this.state.resultInfo = info;
-                // save info also in last step
-                this.state.steps[this.state.steps.length-1].resultInfo = info;
+                this.state.setResultInfo(info);
                 /*
                  * results for attribute list
                  */
@@ -308,8 +316,15 @@ export class QueryService {
                     this.state.resultRelations = this.state.resultRelations.concat(rels);
                 }
             },
-            err => console.error("neo4j result error=", err),
-            () => console.debug('neo4j result query Complete')
+            err => {
+                console.error("neo4j result error=", err)
+                this.loadingSubject.next(false);
+            },
+            () => {
+                console.debug('neo4j result query Complete');
+                this.loadingSubject.next(false);
+                this.stateSubject.next(this.state);
+            }
         );
     }
     
@@ -333,26 +348,26 @@ export class QueryService {
      * 
      * Returns an Observable with the results.
      */
-    fetchCypherResults(queries: string[], params=[{}]) {
+    fetchCypherResults(queries: string[], params=[{}]): Observable<N4jQueryResponse> {
         console.debug("fetching cypher queries: ", queries);
-        let auth = NEO4J_AUTHENTICATION;
-        let headers = new HttpHeaders({
+        const auth = NEO4J_AUTHENTICATION;
+        const headers = new HttpHeaders({
             'Authorization': 'Basic ' + btoa(`${auth.user}:${auth.password}`),
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         });
         // put headers in options
-        let opts = {'headers': headers};
+        const opts = {'headers': headers};
         // unpack queries into statements
-        let statements = queries.map((q, i) => {
+        const statements = queries.map((q, i) => {
             return {'statement': q, 'parameters': (params[i])?params[i]:{}};
         });
         // create POST data from query
-        let data = JSON.stringify({'statements': statements});
+        const data = JSON.stringify({'statements': statements});
         // make post request asynchronously
-        let resp = this._http.post<N4jQueryResponse>(NEO4J_BASE_URL+'/transaction/commit', data, opts);
+        let response = this._http.post<N4jQueryResponse>(NEO4J_BASE_URL+'/transaction/commit', data, opts);
         // return Observable
-        return resp;
+        return response;
     }
     
 }

@@ -1,15 +1,25 @@
 <ng-container *ngIf="queryState">
+
   <mat-expansion-panel>
     <mat-expansion-panel-header>
-      <mat-panel-title>Cypher query</mat-panel-title>
+      <mat-panel-title>
+        Cypher query
+      </mat-panel-title>
+      <!-- <mat-panel-description>
+        Click to expand or collapse
+      </mat-panel-description> -->
     </mat-expansion-panel-header>
     <pre>{{queryState.resultCypherQuery}}</pre>
   </mat-expansion-panel>
+
   <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
       <mat-panel-title>
         Query matches {{resultInfo}} objects
       </mat-panel-title>
+      <!-- <mat-panel-description>
+        Click to expand or collapse
+      </mat-panel-description> -->
     </mat-expansion-panel-header>
     <div>
       <form (ngSubmit)="onSelectCols($event)">

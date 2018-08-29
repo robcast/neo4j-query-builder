@@ -20,7 +20,6 @@ export class QueryState {
     public resultRelations: any[];
     public resultColumns: any[];
     
-
     /**
      * Sets the query state from a string.
      */
@@ -53,10 +52,6 @@ export class QueryState {
         }
     }
 
-    getNumSteps() {
-        return this.steps.length;
-    }
-    
     /**
      * Returns the current query state as a string.
      */
@@ -80,5 +75,14 @@ export class QueryState {
             text += `[${k}='${this.cypherQueryParams[k]}'] `;
         }
         return text;
+    }
+    
+    getNumSteps() {
+        return this.steps.length;
+    }
+    
+    setResultInfo(info: string) {
+        this.resultInfo = info;
+        this.steps[this.steps.length-1].resultInfo = info;
     }
 }

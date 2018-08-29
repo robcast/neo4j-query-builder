@@ -1,9 +1,11 @@
 <ng-container *ngFor="let step of queryStepList; index as i; first as isFirst; last as isLast;">
   <mat-card>  
-    <mat-card-title *ngIf="isLast">Select a query step:</mat-card-title>
-    <query-select
-      [queryStep]="step" [index]="i" 
-      (queryChanged)="onQueryChanged($event)"></query-select>
+    <mat-card-title *ngIf="isLast">Select a query step</mat-card-title>
+    <mat-card-content>
+      <query-select
+        [queryStep]="step" [index]="i"
+        (queryChanged)="onQueryChanged($event)"></query-select>
+    </mat-card-content>      
     <mat-card-actions *ngIf="isLast">
       <button (click)="addQueryStep()">add step</button>
       <button (click)="removeQueryStep()">remove step</button>
@@ -12,7 +14,8 @@
     </mat-card-actions>
   </mat-card>
 </ng-container>
-<query-result *ngIf="queryState?.results"
-    [resultInfo]="queryState.resultInfo"
-    [queryState]="queryState">
+<div class="spinner-container" *ngIf="queryService.loading$ | async">
+  <mat-spinner></mat-spinner>
+</div>
+<query-result *ngIf="queryState?.results">
 </query-result>

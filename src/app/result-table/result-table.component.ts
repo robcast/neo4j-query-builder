@@ -1,54 +1,51 @@
-import { Component, OnInit, OnChanges, Input, ViewChild } from '@angular/core';
+import { Component, OnChanges, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
 
 import { QueryState } from '../model/query-state';
+import { QueryService } from '../services/query.service';
 
 
 @Component({
     selector: 'query-result',
     templateUrl: './result-table.component.html',
-    styleUrls: ['./result-table.component.css'],
-    inputs: ['queryState', 'resultInfo']
+    styleUrls: ['./result-table.component.css']
 })
-export class ResultTableComponent implements OnInit {
+export class ResultTableComponent {
 
-    @Input() queryState: QueryState;
-    @Input() resultInfo: string;
+    queryState: QueryState;
+    resultInfo: string;
 
     dataSource: MatTableDataSource<any>;
     displayedColumns: string[] = [];
-    showTable: boolean = true;
     allColumns: Array<any>;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
+    constructor(private _queryService: QueryService) {
+        _queryService.queryState$.subscribe(state => this.onQueryStateChange(state));
+    }
+
     /**
      * Set the paginator after the view init since this component will
      * be able to query its view for the initialized paginator.
-     * 
-     * TODO: is this really necessary for Angular 6?
      */
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;
     }
 
-    ngOnInit() {
-        console.debug("resulttable: onInit");
-        this.dataSource = new MatTableDataSource(this.queryState.results);
+    onQueryStateChange(newstate: QueryState) {
+        console.debug("resulttable: onQueryStateChange", newstate);
+        this.queryState = newstate;
+        if (this.dataSource == null) {
+            this.dataSource = new MatTableDataSource(this.queryState.results);
+        } else {
+            this.dataSource.data = this.queryState.results;
+        }
+        this.resultInfo = this.queryState.resultInfo;
         this.allColumns = this.queryState.resultColumns;
         this.displayedColumns = this.allColumns.filter(col => col.show).map(col => col.name);
     }
 
-    ngOnChanges() {
-        console.debug("resulttable: onChanges");
-        if (this.dataSource != null) {
-            this.dataSource.data = this.queryState.results;
-            this.showTable = (this.dataSource.data.length < 1000);
-            this.allColumns = this.queryState.resultColumns;
-            this.displayedColumns = this.allColumns.filter(col => col.show).map(col => col.name);
-        }
-    }
-    
     onSelectCols(event: any) {
         this.displayedColumns = this.allColumns.filter(col => col.show).map(col => col.name);
     }

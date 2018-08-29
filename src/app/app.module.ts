@@ -10,13 +10,14 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AppComponent } from './app.component';
 import { QueryComponent } from './query/query.component';
 import { SelectComponent } from './select/select.component';
 import { ResultTableComponent } from './result-table/result-table.component';
 
-@NgModule( {
+@NgModule({
     declarations: [
         AppComponent,
         QueryComponent,
@@ -33,9 +34,10 @@ import { ResultTableComponent } from './result-table/result-table.component';
         MatTableModule,
         MatPaginatorModule,
         MatCardModule,
-        MatExpansionModule
+        MatExpansionModule,
+        MatProgressSpinnerModule
     ],
     providers: [],
     bootstrap: [AppComponent]
-} )
+})
 export class AppModule { }
