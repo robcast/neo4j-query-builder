@@ -5,8 +5,10 @@ import { QueryStep } from '../model/query-step';
 import { QueryState } from '../model/query-state';
 
 import { QueryService } from '../services/query.service';
-import { NormalizationService } from '../services/normalization.service';
-import { getRelationByName } from '../ismi/ismi-relation-types';
+//import { NormalizationService } from '../services/normalization.service';
+import { NormalizationService } from '../app-config';
+//import { TypeService } from '../services/type.service';
+import { TypeService } from '../app-config';
 
 
 @Component({
@@ -31,7 +33,8 @@ export class SelectComponent implements OnInit {
     public queryInput: string;
     public queryInput2: string;
 
-    constructor(private _queryService: QueryService, private _normService: NormalizationService) {
+    constructor(private _queryService: QueryService, private _normService: NormalizationService,
+            private _typeService: TypeService) {
         _queryService.queryState$.subscribe(state => this.onQueryStateChange(state));
     }
     
@@ -111,7 +114,7 @@ export class SelectComponent implements OnInit {
              */
             let opt = this.selectedOption;
             if (opt) {
-                let rel = getRelationByName(opt);
+                let rel = this._typeService.getRelationByName(opt);
                 step = new QueryStep(this.selectedMode, { 'relationType': rel });
             }
         } else if (this.selectedMode.id === 'id_is') {
@@ -151,17 +154,17 @@ export class SelectComponent implements OnInit {
             let val = this.queryInput;
             if (att && val) {
                 // run search term through normalizer 
-                this._normService.fetchArabicTranslitNormalizedString(val)
+                this._normService.normalize(val)
                     .subscribe(
                     data => {
-                        console.debug("openmind norm data=", data);
-                        step = new QueryStep(this.selectedMode, { 'attribute': att, 'value': val, 'normValue': data.normalized_text });
+                        console.debug("normalized data=", data);
+                        step = new QueryStep(this.selectedMode, { 'attribute': att, 'value': val, 'normValue': data });
                         this._queryService.setQueryStep(this.index, step);
                         // query has changed now
                         this.queryChanged.emit(this._queryService.getState());
                     },
-                    err => console.error("openmind norm error=", err),
-                    () => console.debug("openmind norm query Complete")
+                    err => console.error("normalization error=", err),
+                    () => console.debug("normalization query complete")
                     );
                 // query has not been set yet (gets set in callback)
                 return null;
@@ -195,7 +198,7 @@ export class SelectComponent implements OnInit {
              * relation_is
              */
             let name = step.params.relationType.name
-            let rel = getRelationByName(name);
+            let rel = this._typeService.getRelationByName(name);
             this.queryOptions = [rel];
             this.selectedOption = name;
 

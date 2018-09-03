@@ -39,11 +39,3 @@ export class ResultType {
     }
     
 }
-
-export function getResultType(name: string, resultTypes: {[name:string]: ResultType}): ResultType {
-    let rt = resultTypes[name];
-    if (rt == null) {
-        rt = resultTypes['*'];
-    }
-    return rt;
-}

@@ -1,4 +1,4 @@
-import {RelationType, invNamePrefix} from '../model/relation-type';
+import {RelationType, invNamePrefix} from '../../model/relation-type';
 
 export var RELATION_TYPES: {[name:string]: RelationType} = {};
 

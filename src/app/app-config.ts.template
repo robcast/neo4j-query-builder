@@ -2,8 +2,8 @@
  * app-config.ts
  * configuration for query builder tool
  */
-export const NEO4J_BASE_URL = 'https://ismi-dev.mpiwg-berlin.mpg.de/neo4j-ismi/db/data';
+export const APP_TITLE = 'Neo4j Query Browser';
+ 
+export const NEO4J_BASE_URL = 'http://localhost:7474/db/data';
 
 export const NEO4J_AUTHENTICATION = {'user': 'bla', 'password': 'blub'};
-
-export const OPENMIND_BASE_URL = 'https://ismi-dev.mpiwg-berlin.mpg.de/om4-ismi/';

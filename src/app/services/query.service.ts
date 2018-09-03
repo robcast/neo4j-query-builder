@@ -2,24 +2,24 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 
-import {NEO4J_BASE_URL, NEO4J_AUTHENTICATION} from '../app-config'; 
-import {QueryMode, QUERY_MODES, FIRST_QUERY_MODES} from '../model/query-mode';
-import {QueryState} from '../model/query-state';
-import {QueryStep} from '../model/query-step';
-import {getResultType} from '../model/result-type';
-import {ISMI_RESULT_TYPES} from '../ismi/ismi-result-types';
-import {getRelationType} from '../ismi/ismi-relation-types';
+import { NEO4J_BASE_URL, NEO4J_AUTHENTICATION } from '../app-config';
+import { TypeService } from './type.service';
+import { QueryMode, QUERY_MODES, FIRST_QUERY_MODES } from '../model/query-mode';
+import { QueryState } from '../model/query-state';
+import { QueryStep } from '../model/query-step';
+
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class QueryService {
 
+    /* TODO: make configurable */
     public typeAttribute = '_type';
     public excludedAttributes = {};
     public state: QueryState;
     public objectTypes: string[];
-    
+
     private loadingSubject = new BehaviorSubject<boolean>(false);
     public loading$ = this.loadingSubject.asObservable();
 
@@ -28,11 +28,11 @@ export class QueryService {
 
 
 
-    constructor(private _http: HttpClient) {
+    constructor(private _http: HttpClient, private _types: TypeService) {
         // init query state
         this.state = new QueryState();
     }
-    
+
     setup(newStateString: string) {
         // get list of object types
         this.setupObjectTypes();
@@ -41,11 +41,11 @@ export class QueryService {
             this.state.setStateFromString(newStateString);
         }
     }
-    
+
     getState() {
         return this.state;
     }
-    
+
     getQueryModes(index: number): QueryMode[] {
         if (index == 0) {
             return FIRST_QUERY_MODES;
@@ -53,7 +53,7 @@ export class QueryService {
             return QUERY_MODES;
         }
     }
-    
+
     /**
      * return the first set of options for the given query mode.
      */
@@ -74,7 +74,7 @@ export class QueryService {
         console.debug("getQueryOptions returns: ", options);
         return options;
     }
-    
+
     /**
      * fetch all object types from Neo4j and store in this.objectTypes.
      */
@@ -91,19 +91,19 @@ export class QueryService {
                     .map(elem => elem.row[0])
                     .filter(elem => elem[0] != "_");
                 console.debug("object types=", this.objectTypes);
-                },
+            },
             err => console.error("neo4j error=", err),
             () => console.debug('neo4j query Complete')
         );
     }
-    
+
     /**
      * Set the query step at index.
      */
     setQueryStep(index: number, step: QueryStep) {
         this.state.steps[index] = step;
     }
-    
+
     /**
      * Create the cypher queries for the current query state.
      * 
@@ -123,17 +123,17 @@ export class QueryService {
         this.state.steps.forEach((step, stepIdx) => {
             let mode = step.mode.id;
             let params = step.params;
-            
+
             /*
              * step: object type is
              */
             if (mode === 'type_is') {
                 queryMatch = `MATCH (n${nIdx}:${params.objectType})`;
                 queryWhere = '';
-                queryReturn =  `RETURN n${nIdx}`;
+                queryReturn = `RETURN n${nIdx}`;
                 returnType = 'node';
             }
-            
+
             /*
              * step: object id is
              */
@@ -143,7 +143,7 @@ export class QueryService {
                     queryMatch = `MATCH (n${nIdx} {ismi_id: {att_val${stepIdx}}})`;
                     queryParams[`att_val${stepIdx}`] = parseInt(params.value, 10);
                     queryWhere = '';
-                    queryReturn =  `RETURN n${nIdx}`;
+                    queryReturn = `RETURN n${nIdx}`;
                     returnType = 'node';
                 } else {
                     // use where clause
@@ -152,11 +152,11 @@ export class QueryService {
                     } else {
                         queryWhere += ' AND ';
                     }
-                    queryWhere += `n${nIdx}.ismi_id = {att_val${stepIdx}}`;                    
+                    queryWhere += `n${nIdx}.ismi_id = {att_val${stepIdx}}`;
                     queryParams[`att_val${stepIdx}`] = parseInt(params.value, 10);
                 }
             }
-            
+
             /*
              * step: relation type is
              */
@@ -169,10 +169,10 @@ export class QueryService {
                     // inverse relation
                     queryMatch += `<-[:\`${rel.getRelType()}\`]-(n${nIdx})`;
                 }
-                queryReturn =  `RETURN DISTINCT n${nIdx}`;
+                queryReturn = `RETURN DISTINCT n${nIdx}`;
                 returnType = 'node';
             }
-            
+
             /*
              * step: attribute contains(_norm)
              */
@@ -184,20 +184,20 @@ export class QueryService {
                 }
                 if (params.attribute === 'ismi_id') {
                     // ismi_id is integer
-                    queryWhere += `n${nIdx}.ismi_id = {att_val${stepIdx}}`;                    
+                    queryWhere += `n${nIdx}.ismi_id = {att_val${stepIdx}}`;
                     queryParams[`att_val${stepIdx}`] = parseInt(params.value, 10);
                 } else {
                     if (mode === 'att_contains_norm') {
                         // match _n_attribute with normValue
                         queryWhere += `lower(n${nIdx}._n_${params.attribute}) CONTAINS lower({att_val${stepIdx}})`;
-                        queryParams[`att_val${stepIdx}`] = params.normValue;                        
+                        queryParams[`att_val${stepIdx}`] = params.normValue;
                     } else {
                         queryWhere += `lower(n${nIdx}.${params.attribute}) CONTAINS lower({att_val${stepIdx}})`;
                         queryParams[`att_val${stepIdx}`] = params.value;
                     }
                 }
             }
-            
+
             /*
              * step: attribute number range
              */
@@ -212,10 +212,10 @@ export class QueryService {
                 queryParams[`att_nlo${stepIdx}`] = params.numLo;
                 queryParams[`att_nhi${stepIdx}`] = params.numHi;
             }
-            
+
         });
         // compose query
-        resultQuery = queryMatch + (queryWhere ? '\n'+queryWhere : '') + '\n' + queryReturn;
+        resultQuery = queryMatch + (queryWhere ? '\n' + queryWhere : '') + '\n' + queryReturn;
         // compose query for attributes of result
         attributesQuery = queryMatch + ' ' + queryWhere + ` WITH DISTINCT keys(n${nIdx}) AS atts`
             + ` UNWIND atts AS att RETURN DISTINCT att ORDER BY att`;
@@ -229,7 +229,7 @@ export class QueryService {
         this.state.inRelsCypherQuery = inRelsQuery;
         this.state.resultTypes = returnType;
     }
-    
+
     /**
      * Create and run the cypher queries for the current query state.
      * 
@@ -278,9 +278,9 @@ export class QueryService {
                 });
                 let info = '';
                 for (let t in resTypes) {
-                    info += resTypes[t] + ' ' + t + ' ';   
+                    info += resTypes[t] + ' ' + t + ' ';
                 }
-                info = info.substr(0, info.length-1);
+                info = info.substr(0, info.length - 1);
                 this.state.setResultInfo(info);
                 /*
                  * results for attribute list
@@ -291,7 +291,7 @@ export class QueryService {
                     this.state.resultAttributes = atts;
                     // the following assumes only one type in the result
                     for (let t in resTypes) {
-                        this.state.resultType = getResultType(t, ISMI_RESULT_TYPES);
+                        this.state.resultType = this._types.getResultType(t);
                         break;
                     }
                     this.state.resultColumns = this.state.resultType.getColumns(atts);
@@ -304,7 +304,7 @@ export class QueryService {
                     resIdx += 1;
                     let rels = data.results[resIdx].data.map(elem => elem.row[0])
                         .filter(elem => elem[0] != "_")
-                        .map(elem => getRelationType(elem, true));
+                        .map(elem => this._types.getRelationType(elem, true));
                     this.state.resultRelations = rels;
                 }
                 if (this.state.inRelsCypherQuery) {
@@ -312,7 +312,7 @@ export class QueryService {
                     resIdx += 1;
                     let rels = data.results[resIdx].data.map(elem => elem.row[0])
                         .filter(elem => elem[0] != "_")
-                        .map(elem => getRelationType(elem, false));
+                        .map(elem => this._types.getRelationType(elem, false));
                     this.state.resultRelations = this.state.resultRelations.concat(rels);
                 }
             },
@@ -327,9 +327,9 @@ export class QueryService {
             }
         );
     }
-    
-    
-    filterAttributes(attributes: string[], normalized=false) {
+
+
+    filterAttributes(attributes: string[], normalized = false) {
         let atts = [];
         if (normalized) {
             attributes.forEach((att) => {
@@ -342,34 +342,37 @@ export class QueryService {
         }
         return atts;
     }
-    
+
     /**
      * Run the given queries on the Neo4J server.
      * 
      * Returns an Observable with the results.
      */
-    fetchCypherResults(queries: string[], params=[{}]): Observable<N4jQueryResponse> {
+    fetchCypherResults(queries: string[], params = [{}]): Observable<N4jQueryResponse> {
         console.debug("fetching cypher queries: ", queries);
-        const auth = NEO4J_AUTHENTICATION;
-        const headers = new HttpHeaders({
-            'Authorization': 'Basic ' + btoa(`${auth.user}:${auth.password}`),
+        // set HTTP headers
+        let headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
-        });
+        };
+        if (NEO4J_AUTHENTICATION != null) {
+            const auth = NEO4J_AUTHENTICATION;
+            headers['Authorization'] = 'Basic ' + btoa(`${auth.user}:${auth.password}`);
+        }
         // put headers in options
-        const opts = {'headers': headers};
+        const opts = { 'headers': new HttpHeaders(headers) };
         // unpack queries into statements
         const statements = queries.map((q, i) => {
-            return {'statement': q, 'parameters': (params[i])?params[i]:{}};
+            return { 'statement': q, 'parameters': (params[i]) ? params[i] : {} };
         });
         // create POST data from query
-        const data = JSON.stringify({'statements': statements});
+        const data = JSON.stringify({ 'statements': statements });
         // make post request asynchronously
-        let response = this._http.post<N4jQueryResponse>(NEO4J_BASE_URL+'/transaction/commit', data, opts);
+        let response = this._http.post<N4jQueryResponse>(NEO4J_BASE_URL + '/transaction/commit', data, opts);
         // return Observable
         return response;
     }
-    
+
 }
 
 export interface N4jQueryResponse {
