@@ -10,15 +10,21 @@ import { TypeService } from '../../services/type.service';
     providedIn: 'root'
 })
 export class IsmiTypeService extends TypeService {
+
     /**
      * Name of the attribute that contains the type of the object.
      */
-    public typeAttribute: '_type';
+    public typeAttribute: string = '_type';
+
+    /**
+     * Name of the attribute that contains the id of the object.
+     */
+    public idAttribute: string = 'ismi_id';
 
     /**
      * Prefix of the attribute that contains the normalized value.
      */
-    public normPrefix: '_n_';
+    public normPrefix: string = '_n_';
 
     protected RESULT_TYPES: { [name: string]: ResultType } = {
         '*': new ResultType('*', 'ismi_id', [

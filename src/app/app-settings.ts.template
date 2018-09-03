@@ -1,9 +1,15 @@
 /* 
- * app-config.ts
+ * app-settings.ts
  * configuration for query builder tool
  */
-export const APP_TITLE = 'Neo4j Query Builder';
+export const SETTINGS = {
+    APP_TITLE: 'Neo4j Query Builder',
  
-export const NEO4J_BASE_URL = 'http://localhost:7474/db/data';
+    NEO4J_BASE_URL: 'http://localhost:7474/db/data',
 
-export const NEO4J_AUTHENTICATION = {'user': 'bla', 'password': 'blub'};
+    NEO4J_AUTHENTICATION: {'user': 'bla', 'password': 'blub'}
+
+    //ID_ATTRIBUTE: '_id',
+    //TYPE_ATTRIBUTE: '_type',
+    //NORM_PREFIX: '_n_'
+}

@@ -6,6 +6,7 @@ export class QueryState {
     public steps: QueryStep[] = [];
 
     public resultCypherQuery: string;
+    public typesCypherQuery: string;
     public attributesCypherQuery: string;
     public outRelsCypherQuery: string;
     public inRelsCypherQuery: string;

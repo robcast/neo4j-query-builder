@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ResultType } from '../model/result-type';
 import { RelationType, invNamePrefix } from '../model/relation-type';
+import { SETTINGS } from '../app-settings';
 
 /**
  * Type service.
@@ -13,15 +14,22 @@ export class TypeService {
     /**
      * Name of the attribute that contains the type of the object.
      */
-    public typeAttribute: string = '_type';
+    public typeAttribute: string = SETTINGS['TYPE_ATTRIBUTE'];
+
+    /**
+     * Name of the attribute that contains the id of the object.
+     */
+    public idAttribute: string = SETTINGS['ID_ATTRIBUTE'];
 
     /**
      * Prefix of the attribute that contains the normalized value.
      */
-    public normPrefix: string = '_n_';
+    public normPrefix: string = SETTINGS['NORM_PREFIX'];
 
     /**
      * Mapping of object type names to ResultTypes.
+     * 
+     * name=* defines default for all other types.
      */
     protected RESULT_TYPES: { [name: string]: ResultType } = {
         // no default result type

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { APP_TITLE } from './app-settings';
+import { SETTINGS } from './app-settings';
 
 @Component({
     selector: 'app-root',
@@ -7,5 +7,5 @@ import { APP_TITLE } from './app-settings';
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    public title = APP_TITLE;
+    public title = SETTINGS['APP_TITLE'];
 }
