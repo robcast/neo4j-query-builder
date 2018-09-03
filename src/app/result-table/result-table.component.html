@@ -10,6 +10,7 @@
       </mat-panel-description> -->
     </mat-expansion-panel-header>
     <pre>{{queryState.resultCypherQuery}}</pre>
+    <pre>{{queryState.cypherQueryParams | json}}</pre>
   </mat-expansion-panel>
 
   <mat-expansion-panel [expanded]="true">

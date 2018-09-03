@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 
-import { NEO4J_BASE_URL, NEO4J_AUTHENTICATION } from '../app-config';
+import { NEO4J_BASE_URL, NEO4J_AUTHENTICATION } from '../app-settings';
 import { TypeService } from './type.service';
 import { QueryMode, QUERY_MODES, FIRST_QUERY_MODES } from '../model/query-mode';
 import { QueryState } from '../model/query-state';
@@ -14,8 +14,6 @@ import { QueryStep } from '../model/query-step';
 })
 export class QueryService {
 
-    /* TODO: make configurable */
-    public typeAttribute = '_type';
     public excludedAttributes = {};
     public state: QueryState;
     public objectTypes: string[];
@@ -25,8 +23,6 @@ export class QueryService {
 
     private stateSubject = new BehaviorSubject<QueryState>(new QueryState());
     public queryState$ = this.stateSubject.asObservable();
-
-
 
     constructor(private _http: HttpClient, private _types: TypeService) {
         // init query state
@@ -183,13 +179,15 @@ export class QueryService {
                     queryWhere += ' AND ';
                 }
                 if (params.attribute === 'ismi_id') {
+                    // TODO: generalize
                     // ismi_id is integer
                     queryWhere += `n${nIdx}.ismi_id = {att_val${stepIdx}}`;
                     queryParams[`att_val${stepIdx}`] = parseInt(params.value, 10);
                 } else {
                     if (mode === 'att_contains_norm') {
                         // match _n_attribute with normValue
-                        queryWhere += `lower(n${nIdx}._n_${params.attribute}) CONTAINS lower({att_val${stepIdx}})`;
+                        let npre = this._types.normPrefix;
+                        queryWhere += `lower(n${nIdx}.${npre}${params.attribute}) CONTAINS lower({att_val${stepIdx}})`;
                         queryParams[`att_val${stepIdx}`] = params.normValue;
                     } else {
                         queryWhere += `lower(n${nIdx}.${params.attribute}) CONTAINS lower({att_val${stepIdx}})`;
@@ -269,7 +267,7 @@ export class QueryService {
                 // count all types
                 let resTypes = {};
                 this.state.results.forEach((r) => {
-                    let t = r[this.typeAttribute];
+                    let t = r[this._types.typeAttribute];
                     if (resTypes[t] == null) {
                         resTypes[t] = 1;
                     } else {

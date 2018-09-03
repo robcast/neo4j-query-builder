@@ -5,10 +5,8 @@ import { QueryStep } from '../model/query-step';
 import { QueryState } from '../model/query-state';
 
 import { QueryService } from '../services/query.service';
-//import { NormalizationService } from '../services/normalization.service';
-import { NormalizationService } from '../app-config';
-//import { TypeService } from '../services/type.service';
-import { TypeService } from '../app-config';
+import { NormalizationService } from '../services/normalization.service';
+import { TypeService } from '../services/type.service';
 
 
 @Component({

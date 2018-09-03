@@ -1,6 +1,7 @@
 <ng-container *ngFor="let step of queryStepList; index as i; first as isFirst; last as isLast;">
   <mat-card>  
-    <mat-card-title *ngIf="isLast">Select a query step</mat-card-title>
+    <mat-card-title *ngIf="!isLast">Step {{i+1}}</mat-card-title>
+    <mat-card-title *ngIf="isLast">Add a query step</mat-card-title>
     <mat-card-content>
       <query-select
         [queryStep]="step" [index]="i"

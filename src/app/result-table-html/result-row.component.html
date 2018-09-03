@@ -1,9 +1,0 @@
-<ng-container *ngIf="rowType=='node'">
-	<td style="vertical-align: top;" *ngFor="let col of columns"><a
-		*ngIf="col && col.name=='link'" href="{{rowData[col.name]}}"
-		target="_blank">Link</a> <span *ngIf="col && col.name!='link'">{{rowData[col.name]}}</span>
-	</td>
-</ng-container>
-<ng-container *ngIf="rowType=='text'">
-	<td style="vertical-align: top;">{{rowData}}</td>
-</ng-container>

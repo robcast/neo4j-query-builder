@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
+import { APP_TITLE } from './app-settings';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Neo4J Query Browser for ISMI';
+    public title = APP_TITLE;
 }

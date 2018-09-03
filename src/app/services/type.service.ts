@@ -10,10 +10,26 @@ import { RelationType, invNamePrefix } from '../model/relation-type';
 })
 export class TypeService {
 
+    /**
+     * Name of the attribute that contains the type of the object.
+     */
+    public typeAttribute: string = '_type';
+
+    /**
+     * Prefix of the attribute that contains the normalized value.
+     */
+    public normPrefix: string = '_n_';
+
+    /**
+     * Mapping of object type names to ResultTypes.
+     */
     protected RESULT_TYPES: { [name: string]: ResultType } = {
-        // no default relation type
+        // no default result type
     }
     
+    /**
+     * Mapping of relation type names to RelationTypes.
+     */
     protected RELATION_TYPES: { [name: string]: RelationType } = {
         // no default relation type
     }

@@ -2,7 +2,7 @@
  * app-config.ts
  * configuration for query builder tool
  */
-export const APP_TITLE = 'Neo4j Query Browser';
+export const APP_TITLE = 'Neo4j Query Builder';
  
 export const NEO4J_BASE_URL = 'http://localhost:7474/db/data';
 

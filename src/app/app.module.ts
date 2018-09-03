@@ -17,6 +17,8 @@ import { QueryComponent } from './query/query.component';
 import { SelectComponent } from './select/select.component';
 import { ResultTableComponent } from './result-table/result-table.component';
 
+import { NormalizationServiceProvider, TypeServiceProvider } from './app-services';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -37,7 +39,10 @@ import { ResultTableComponent } from './result-table/result-table.component';
         MatExpansionModule,
         MatProgressSpinnerModule
     ],
-    providers: [],
+    providers: [
+        NormalizationServiceProvider,
+        TypeServiceProvider
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

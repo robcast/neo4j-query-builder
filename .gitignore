@@ -40,4 +40,5 @@ testem.log
 Thumbs.db
 
 # do not check in config
-src/app/app-config.ts
+src/app/app-settings.ts
+src/app/app-services.ts

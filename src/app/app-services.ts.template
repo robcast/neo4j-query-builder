@@ -1,0 +1,9 @@
+/* 
+ * app-services.ts
+ * configuration of services for query builder tool
+ */
+import { NormalizationService } from './services/normalization.service';
+export const NormalizationServiceProvider = { provide: NormalizationService, useClass: NormalizationService };
+
+import { TypeService } from './services/type.service';
+export const TypeServiceProvider = { provide: TypeService, useClass: TypeService };
