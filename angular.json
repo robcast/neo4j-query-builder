@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "n4j-query-ismi": {
+    "neo4j-query-builder": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/n4j-query-ismi",
+            "outputPath": "dist/neo4j-query-builder",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -53,18 +53,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "n4j-query-ismi:build"
+            "browserTarget": "neo4j-query-builder:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "n4j-query-ismi:build:production"
+              "browserTarget": "neo4j-query-builder:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "n4j-query-ismi:build"
+            "browserTarget": "neo4j-query-builder:build"
           }
         },
         "test": {
@@ -101,7 +101,7 @@
         }
       }
     },
-    "n4j-query-ismi-e2e": {
+    "neo4j-query-builder-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {
@@ -109,11 +109,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "n4j-query-ismi:serve"
+            "devServerTarget": "neo4j-query-builder:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "n4j-query-ismi:serve:production"
+              "devServerTarget": "neo4j-query-builder:serve:production"
             }
           }
         },
@@ -129,5 +129,5 @@
       }
     }
   },
-  "defaultProject": "n4j-query-ismi"
+  "defaultProject": "neo4j-query-builder"
 }
