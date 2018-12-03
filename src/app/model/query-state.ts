@@ -69,11 +69,8 @@ export class QueryState {
         let text = this.resultCypherQuery;
         let hasParams = false;
         for (let k in this.cypherQueryParams) {
-            if (!hasParams) {
-                hasParams = true;
-                text += '\n';
-            }
-            text += `[${k}='${this.cypherQueryParams[k]}'] `;
+            // replace variable in text with quoted value
+            text = text.replace(`{${k}}`, `"${this.cypherQueryParams[k]}"`);
         }
         return text;
     }

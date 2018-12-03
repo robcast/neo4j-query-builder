@@ -147,8 +147,8 @@ export class QueryService {
                     } else {
                         queryWhere += ' AND ';
                     }
-                    queryWhere += `n${nIdx}.ismi_id = {att_val${stepIdx}}`;
-                    queryParams[`att_val${stepIdx}`] = parseInt(params.value, 10);
+                    queryWhere += `n${nIdx}.ismi_id = toint({att_val${stepIdx}})`;
+                    queryParams[`att_val${stepIdx}`] = params.value;
                 }
             }
 
@@ -180,16 +180,16 @@ export class QueryService {
                 if (params.attribute === 'ismi_id') {
                     // TODO: generalize
                     // ismi_id is integer
-                    queryWhere += `n${nIdx}.ismi_id = {att_val${stepIdx}}`;
-                    queryParams[`att_val${stepIdx}`] = parseInt(params.value, 10);
+                    queryWhere += `n${nIdx}.ismi_id = toint({att_val${stepIdx}})`;
+                    queryParams[`att_val${stepIdx}`] = params.value;
                 } else {
                     if (mode === 'att_contains_norm') {
                         // match _n_attribute with normValue
                         let npre = this._types.normPrefix;
-                        queryWhere += `lower(n${nIdx}.${npre}${params.attribute}) CONTAINS lower({att_val${stepIdx}})`;
+                        queryWhere += `toLower(n${nIdx}.${npre}${params.attribute}) CONTAINS toLower({att_val${stepIdx}})`;
                         queryParams[`att_val${stepIdx}`] = params.normValue;
                     } else {
-                        queryWhere += `lower(n${nIdx}.${params.attribute}) CONTAINS lower({att_val${stepIdx}})`;
+                        queryWhere += `toLower(n${nIdx}.${params.attribute}) CONTAINS toLower({att_val${stepIdx}})`;
                         queryParams[`att_val${stepIdx}`] = params.value;
                     }
                 }
