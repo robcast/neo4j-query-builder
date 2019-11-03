@@ -1,5 +1,6 @@
 import { Component, OnChanges, Input, ViewChild, SimpleChanges } from '@angular/core';
-import { MatTableDataSource, MatPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 import { QueryState } from '../model/query-state';
 import { QueryService } from '../services/query.service';
