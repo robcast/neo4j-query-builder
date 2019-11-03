@@ -19,7 +19,7 @@ export class ResultTableComponent {
     displayedColumns: string[] = [];
     allColumns: Array<any>;
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
     constructor(private _queryService: QueryService) {
         _queryService.queryState$.subscribe(state => this.onQueryStateChange(state));
