@@ -392,7 +392,7 @@ export class QueryService {
         // create POST data from query
         const data = JSON.stringify({ 'statements': statements });
         // make post request asynchronously
-        let response = this._http.post<N4jQueryResponse>(SETTINGS['NEO4J_BASE_URL'] + '/transaction/commit', data, opts);
+        let response = this._http.post<N4jQueryResponse>(SETTINGS['NEO4J_BASE_URL'] + '/tx/commit', data, opts);
         // return Observable
         return response;
     }
