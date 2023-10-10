@@ -135,8 +135,8 @@ export class QueryService {
             if (mode === 'id_is') {
                 if (!queryMatch) {
                     // first step - use match clause
-                    queryMatch = `MATCH (n${nIdx} {ismi_id: {att_val${stepIdx}}})`;
-                    queryParams[`att_val${stepIdx}`] = parseInt(params.value, 10);
+                    queryMatch = `MATCH (n${nIdx} {ismi_id: \$att_val${stepIdx}})`;
+                    queryParams[`att_val${stepIdx}`] = params.value;
                     queryWhere = '';
                     queryReturn = `RETURN n${nIdx}`;
                     returnType = 'node';
@@ -147,7 +147,7 @@ export class QueryService {
                     } else {
                         queryWhere += ' AND ';
                     }
-                    queryWhere += `n${nIdx}.ismi_id = toint({att_val${stepIdx}})`;
+                    queryWhere += `n${nIdx}.ismi_id = \$att_val${stepIdx}`;
                     queryParams[`att_val${stepIdx}`] = params.value;
                 }
             }
@@ -180,16 +180,16 @@ export class QueryService {
                 if (params.attribute === 'ismi_id') {
                     // TODO: generalize
                     // ismi_id is integer
-                    queryWhere += `n${nIdx}.ismi_id = toint({att_val${stepIdx}})`;
+                    queryWhere += `n${nIdx}.ismi_id = toint(\$att_val${stepIdx})`;
                     queryParams[`att_val${stepIdx}`] = params.value;
                 } else {
                     if (mode === 'att_contains_norm') {
                         // match _n_attribute with normValue
                         let npre = this._types.normPrefix;
-                        queryWhere += `toLower(n${nIdx}.${npre}${params.attribute}) CONTAINS toLower({att_val${stepIdx}})`;
+                        queryWhere += `toLower(n${nIdx}.${npre}${params.attribute}) CONTAINS toLower(\$att_val${stepIdx})`;
                         queryParams[`att_val${stepIdx}`] = params.normValue;
                     } else {
-                        queryWhere += `toLower(n${nIdx}.${params.attribute}) CONTAINS toLower({att_val${stepIdx}})`;
+                        queryWhere += `toLower(n${nIdx}.${params.attribute}) CONTAINS toLower(\$att_val${stepIdx})`;
                         queryParams[`att_val${stepIdx}`] = params.value;
                     }
                 }
@@ -204,8 +204,8 @@ export class QueryService {
                 } else {
                     queryWhere += ' AND ';
                 }
-                queryWhere += `toint(n${nIdx}.${params.attribute}) >= toint({att_nlo${stepIdx}})`
-                    + ` AND toint(n${nIdx}.${params.attribute}) <= toint({att_nhi${stepIdx}})`;
+                queryWhere += `toint(n${nIdx}.${params.attribute}) >= toint(\$att_nlo${stepIdx})`
+                    + ` AND toint(n${nIdx}.${params.attribute}) <= toint(\$att_nhi${stepIdx})`;
                 queryParams[`att_nlo${stepIdx}`] = params.numLo;
                 queryParams[`att_nhi${stepIdx}`] = params.numHi;
             }

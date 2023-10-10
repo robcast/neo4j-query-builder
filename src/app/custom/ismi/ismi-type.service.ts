@@ -24,7 +24,7 @@ export class IsmiTypeService extends TypeService {
     /**
      * Prefix of the attribute that contains the normalized value.
      */
-    public normPrefix: string = '_n_';
+    public normPrefix: string = null; // '_n_';
 
     protected RESULT_TYPES: { [name: string]: ResultType } = {
         '*': new ResultType('*', 'ismi_id', [
