@@ -120,6 +120,5 @@
         }
       }
     }
-  },
-  "defaultProject": "neo4j-query-builder"
+  }
 }
