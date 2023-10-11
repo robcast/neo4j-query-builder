@@ -180,7 +180,7 @@ export class QueryService {
                 if (params.attribute === 'ismi_id') {
                     // TODO: generalize
                     // ismi_id is integer
-                    queryWhere += `n${nIdx}.ismi_id = toint(\$att_val${stepIdx})`;
+                    queryWhere += `n${nIdx}.ismi_id = toInteger(\$att_val${stepIdx})`;
                     queryParams[`att_val${stepIdx}`] = params.value;
                 } else {
                     if (mode === 'att_contains_norm') {
@@ -204,8 +204,8 @@ export class QueryService {
                 } else {
                     queryWhere += ' AND ';
                 }
-                queryWhere += `toint(n${nIdx}.${params.attribute}) >= toint(\$att_nlo${stepIdx})`
-                    + ` AND toint(n${nIdx}.${params.attribute}) <= toint(\$att_nhi${stepIdx})`;
+                queryWhere += `toInteger(n${nIdx}.${params.attribute}) >= toInteger(\$att_nlo${stepIdx})`
+                    + ` AND toInteger(n${nIdx}.${params.attribute}) <= toInteger(\$att_nhi${stepIdx})`;
                 queryParams[`att_nlo${stepIdx}`] = params.numLo;
                 queryParams[`att_nhi${stepIdx}`] = params.numHi;
             }
