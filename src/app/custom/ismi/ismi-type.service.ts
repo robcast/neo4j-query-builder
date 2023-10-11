@@ -23,6 +23,7 @@ export class IsmiTypeService extends TypeService {
 
     /**
      * Prefix of the attribute that contains the normalized value.
+     * (currently no normalization)
      */
     public normPrefix: string = null; // '_n_';
 
