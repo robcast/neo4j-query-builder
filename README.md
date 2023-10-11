@@ -37,7 +37,7 @@ The app will automatically reload if you change any of the source files.
 ## Build
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. 
-Use the `--prod` flag for a production build. You may also have to specify `--base-href` if the code 
+Use the `-c production` flag for a production build. You may also have to specify `--base-href` if the code 
 is not deployed at the web root.
 
 ## Customization
